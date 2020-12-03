@@ -75,30 +75,64 @@ For part two
 5.) create list of tupples for slopes to check and iterate through that list with above logic for each slope 
 '''
 import math
-file = 'adventofcode2020\day_3_toboggan_trajectorry_input.txt'
-terrain = []
-with open(file) as f:
-    count = 0 
-    for line in f:
-        x = []
-        for i in line:
-            if i =='.':
-                x.append(0)
-            else:
-                x.append(1)
-        terrain.append(x)
-height = len(terrain)
-width = len(terrain[1])
-slopes = [(1,1),(3,1),(5,1),(7,1),(1,2)]
-l=[]
-for x,y in slopes:
-    col=0
-    total = []
-    for row in range(0,height,y):
+
+def load_terrain(file)->list:
+    '''
+    loads a terrain file converting it to ones and zeros for eash counting returing a nested list 
+    '''
+    terrain = []
+    with open(file) as f:
+        count = 0 
+        for line in f:
+            x = []
+            for i in line:
+                if i =='.':
+                    x.append(0)
+                else:
+                    x.append(1)
+            terrain.append(x)
+    return terrain
+
+
+def check_path(slope:tuple, terrain:list)->int:
+    '''
+    given a terrain and a slope(x,y) iterates through the terrain to count number of trees encountered
+    '''
+    col =0 # set col to 0 as atarting point
+    total = [] # init list to get total at the end 
+    x,y = slope[0], slope[1] # get x and y values for slope 
+    for row in range(0,len(terrain),y):
+        # iterate through each row and column useing x,y from slope adding each step to the total list 
         total.append(terrain[row][col])
+        width = len(terrain[row])
         col+=x
         if col >= width-1:
             col =col-(width-1)
-    l.append(sum(total))
+    #return the total number trees encountered for this slope 
+    return sum(total)
+    
+def check_all_paths(slopes:list,terrain:list)->list: 
+    '''
+    iterates through a list of solpes (x,y) and returns a list of trees encoutered for each slope 
+    '''
+    l = [] # init list for tracking trees counted on each slope
+    for slope in slopes: # iterates through slopes and checks path for trees 
+        l.append(check_path(slope,terrain))
+    return l
 
-print(math.prod(l))
+def solve(file,slopes:list)->int:
+    '''
+    loads file, and checks each path for trees counted returning the answer for day three of AOC 
+    '''
+    terrain = load_terrain(file)
+    tree_counts = check_all_paths(slopes,terrain)
+
+    return math.prod(tree_counts)
+
+file = 'day_3_toboggan_trajectorry_input.txt'
+
+#part 1 
+print(solve(file,[(3,1)]))
+#part 2
+slopes = [(1,1),(3,1),(5,1),(7,1),(1,2)]
+print(solve(file,slopes))
