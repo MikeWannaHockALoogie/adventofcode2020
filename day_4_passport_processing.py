@@ -1,5 +1,5 @@
 import pandas as pd
-import re
+
 file = 'day_4_passport_processing_input.txt'
 
 def load_data(file)->list:
@@ -43,11 +43,10 @@ s2 =s1[
     s1.byr.between('1920','2002')
     & s1.iyr.between('2010','2020')
     & s1.eyr.between('2020','2030')
-    & s1.hgt.str.fullmatch('(1[5-8]\d|19[0-6])cm|(59|6\d|7[0-6])in') 
-    & s1.hcl.str.fullmatch('#[0-9a-f]{6}')
+    & s1.hgt.str.fullmatch(r'(1[5-8]\d|19[0-6])cm|(59|6\d|7[0-6])in') 
+    & s1.hcl.str.fullmatch(r'#[0-9a-f]{6}')
     & s1.ecl.isin(['amb','blu','brn','gry','grn','hzl','oth'])
-    & s1.pid.str.fullmatch('\d{9}') 
-
+    & s1.pid.str.fullmatch(r'\d{9}$') 
 ]
 # solutions for part one and two 
 print(s1.shape[0])
