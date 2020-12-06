@@ -6,31 +6,23 @@ def to_binary(number:str)->str:
     '''
     takes boarding pass code and converts to binary number in string format 
     '''
-    number= number.replace('F','0')
-    number= number.replace('B','1')
-    number= number.replace('R','1')
-    number= number.replace('L','0')
+    number= number.replace('F','0').replace('B','1').replace('R','1').replace('L','0')
     return number
 
 def binary_converter(number:str)->int:
     '''
     takes binary number in string format and converts to decimal as an integer
     '''
-    count = 0
     total = 0
     for i in range(len(number)-1,-1,-1):
-        total += (int(number[i]) * (2 ** count))
-        count +=1
+        total += (int(number[i]) * (2 ** abs(len(number)-i-1)))
     return total
 
 def get_seat_id(number:str)->int:
     '''
     takes binary number in string format and gets seat ID 
     '''
-    row = binary_converter(number[:7])
-    column = binary_converter(number[-3:])
-    seat_id = row * 8 + column
-    return seat_id
+    return binary_converter(number[:7]) * 8 + binary_converter(number[-3:])
 
 def solver(number:str)->int:
     '''
@@ -52,13 +44,12 @@ assert binary_converter('1000110') ==70
 assert to_binary(test) == '1000110111'
 assert solver(test) == 567
 
-
 def find_my_seat(data:list)->int:
     '''
     iterates though the list of boarding passes to find the gap in and returns the missing boarding pass. 
     '''
     seat_ids = sorted([solver(line) for line in data ])
-    for i in range(0,len(seat_ids)-1):
+    for i in range(0,len(seat_ids)-2):
         if seat_ids[i+1]-seat_ids[i] > 1:
             return int(seat_ids[i])+1
 
