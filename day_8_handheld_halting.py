@@ -1,5 +1,5 @@
 '''
-for day 7 psuedo
+for day 8 psuedo
 1.)import instructions into pandas data frame
 2.)follow imported instructions until one is repeated using the 'executed column' to keep track of lines already ran
 3.)return accumulator
@@ -9,6 +9,7 @@ for day 7 psuedo
 6.) when instruction is repeated return list instead of accumulator
 7.) iterate over list using code from part one and return accumulator if we move past final command
 
+this contains first solution using pandas at bottom as well as solution using class. 
 '''
 import pandas as pd
 from copy import deepcopy
@@ -25,8 +26,16 @@ df = pd.DataFrame.from_dict(data)
 print(df.shape)
 # print(df.head())
 
+'''
+second solution using classes
+'''
+
 
 class Instruction():
+    '''
+    class and methods for single line instruction
+    '''
+
     def __init__(self, id, cmd, amt, executed=False, link=None):
         self.id = id
         self.cmd = cmd
@@ -71,6 +80,10 @@ class Instruction():
 
 
 class InstructionList():
+    '''
+    class to contain list of instructions 
+    '''
+
     def __init__(self, instructions: dict, accumulator=0, start_id=0):
         self.instructions = instructions
         self.current_inst = self.instructions[start_id]
@@ -170,6 +183,7 @@ class InstructionList():
                 break
 
 
+# parse input into dictionary od instruction Class objects
 instructions = dict()
 for i in range(len(file)):
     instruction = Instruction(id=i, cmd=file[i][0], amt=file[i][1])
@@ -186,6 +200,9 @@ print(program.fix())
 print(program.run())
 print(program.fix())
 
+
+'''
+first solution built on pandas no longer functional as data is not parsed correctly for it 
 
 def run(df1, i=0):
     df = df1.copy(deep=True)
@@ -231,5 +248,6 @@ def part_two(df_list):
     return None
 
 
-'''df_list = run(df)
-print(part_two(df_list))'''
+df_list = run(df)
+print(part_two(df_list))
+'''
